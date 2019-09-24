@@ -1,0 +1,115 @@
+<div class="main-container">
+    <div class="aside-navbar">
+        <div class="aside-details">
+            <a class="main-topic" href="#documentation">Documentation</a>
+            <a class="sub-topic" href="#users">Users</a>
+            <a class="topic" href="#get-users">GET Users</a>
+            <a class="topic" href="#post-user">POST User</a>
+            <a class="topic" href="#put-user">PUT User</a>
+            <a class="topic" href="#patch-user">PATCH User</a>
+            <a class="topic" href="#delete-user">DELETE User</a>
+
+            <a class="sub-topic" href="#pets">Pets</a>
+            <a class="topic" href="#get-pets">GET Pets</a>
+            <a class="topic" href="#post-pet">POST Pet</a>
+            <a class="topic" href="#put-pet">PUT Pet</a>
+            <a class="topic" href="#delete-pet">DELETE Pet</a>
+
+            <a class="sub-topic" href="#interactions">Interactions</a>
+            <a class="topic" href="#get-interactions">GET All Interactions</a>
+            <a class="topic" href="#get-interactions-by-pet">GET Interactions by pet</a>
+            <a class="topic" href="#post-interaction">POST Interaction</a>
+            <a class="topic" href="#put-interaction">PATCH Interaction</a>
+
+            <a class="main-topic" href="#integrations">Integrations</a>
+            <a class="topic" href="#npm">npm</a>
+            <a class="topic" href="#mlab">mLab</a>
+            <a class="topic" href="#heroku">Heroku</a>
+        </div>
+    </div>
+    <div class="content">
+        <div class="content-details">
+        <h2 id="documentation">Documentation</h2>
+        <h3 id="users">Users</h3>
+        <div id="get-users" class="topic">
+            <div class="title">
+                <i class="fa fa-circle"></i>
+                <div class="text">
+                    <h4> GET Users: </h4>
+                    <span> To get the list of all users </span>
+                </div>
+            </div>
+            <span class="endpoint">GET http://localhost:3000/api/user-management</span>
+            <span class="result">Response:</span>
+            <span class="status">Status: 200 OK</span>
+            <pre class="prettyprint"><code>{{ doc.getUsersJson }}</code></pre>
+        </div>
+        <div id="post-user" class="topic">
+            <div class="title">
+                <i class="fa fa-circle"></i>
+                <div class="text">
+                    <h4> POST User: </h4>
+                    <span> To add new user to users collection </span>
+                </div>
+            </div>
+            <span class="endpoint">POST http://localhost:3000/api/user-management</span>
+            <span class="result">Body:</span>
+            <pre class="prettyprint"><code>{{ doc.postUserJson }}</code></pre>
+            <span class="result">Response: Document inserted (JSON)</span>
+            <span class="status">Status: 201 Created</span>
+        </div>
+        <div id="get-user" class="topic">
+            <div class="title">
+                <i class="fa fa-circle"></i>
+                <div class="text">
+                    <h4> GET User: </h4>
+                    <span> To get a specific user to users collection </span>
+                </div>
+            </div>
+            <span class="endpoint">GET http://localhost:3000/api/user-management/:id</span>
+            <span class="result">Response:</span>
+            <span class="status">Status: 200 OK</span>
+            <pre class="prettyprint"><code>{{ doc.getUserJson }}</code></pre>
+        </div>
+        <div id="put-user" class="topic">
+            <div class="title">
+                <i class="fa fa-circle"></i>
+                <div class="text">
+                    <h4> PUT User: </h4>
+                    <span> To update a specific user to users collection </span>
+                </div>
+            </div>
+            <span class="endpoint">PUT http://localhost:3000/api/user-management</span>
+            <span class="result">Body:</span>
+            <pre class="prettyprint"><code>{{ doc.putUserJson }}</code></pre>
+            <span class="result">Response: Document updated (JSON)</span>
+            <span class="status">Status: 200 OK</span>
+        </div>
+        <div id="patch-user" class="topic">
+            <div class="title">
+                <i class="fa fa-circle"></i>
+                <div class="text">
+                    <h4> PATCH User: </h4>
+                    <span> To update only the password of a specific user</span>
+                </div>
+            </div>
+            <span class="endpoint">PUT http://localhost:3000/api/user-management</span>
+            <span class="result">Body:</span>
+            <pre class="prettyprint"><code>{{ doc.patchUserJson }}</code></pre>
+            <span class="result">Response: Document updated (JSON)</span>
+            <span class="status">Status: 200 OK</span>
+        </div>
+        <div id="delete-user" class="topic">
+            <div class="title">
+                <i class="fa fa-circle"></i>
+                <div class="text">
+                    <h4> DELETE User: </h4>
+                    <span> To delete (disable) a specific user of users collection</span>
+                </div>
+            </div>
+            <span class="endpoint">DELETE http://localhost:3000/api/user-management/:id</span>
+            <span class="result">Response</span>
+            <span class="status">Status: 204 Not Content</span>
+        </div>
+    </div>
+</div>
