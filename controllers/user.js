@@ -44,3 +44,12 @@ exports.disableAccount = async(req, res, next) => {
         res.status(500).send(error);
     }
 };
+
+exports.getAll = async(req, res, next) => {
+    try {
+        data = await UserModel.find().exec();
+        res.status(200).send(data);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+};
