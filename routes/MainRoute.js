@@ -9,7 +9,4 @@ router.get('/', function(req, res, next) {
     res.render('index', { doc });
 });
 
-router.get('/api', function(req, res, next) {
-    res.render('index');
-});
 module.exports = router;
