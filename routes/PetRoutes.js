@@ -10,6 +10,7 @@ class PetRoutes {
         router.post('/add-pet', petController.addPet);
         router.put('/update-pet', petController.updatePet);
         router.post('/set-status', petController.changePetStatus);
+        router.post('/load-image', petController.uploadImage);
         return router;
     }
 }

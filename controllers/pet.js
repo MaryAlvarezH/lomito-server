@@ -1,5 +1,8 @@
 const mongoose = require('../config/connection');
 const PetModel = require('../models/pet');
+const upload = require('../services/file-upload');
+
+const singleUpload = upload.single('image');
 
 
 exports.allPetsToAdopt = async(req, res) => {
@@ -23,7 +26,13 @@ exports.petDetails = async(req, res) => {
 };
 
 exports.addPet = async(req, res) => {
-    try {
+    singleUpload(req, res, async(err) => {
+        if (err) {
+            return res.status(422).send({ error: { title: 'File Upload Error', detail: err.message } });
+        }
+        petImageURL = req.file.location;
+        console.log('location', req.file.location);
+
         const pet = new PetModel({
             name: req.body.name,
             sort: req.body.sort,
@@ -36,14 +45,28 @@ exports.addPet = async(req, res) => {
             skills: req.body.skills,
             observations: req.body.observations,
             ownerId: req.body.ownerId,
+            imageURL: petImageURL
         });
 
-        const petSaved = await pet.save();
-        res.status(201).send(petSaved);
+        console.log('pet', pet);
+        try {
+            const petSaved = await pet.save();
+            res.status(201).send(petSaved);
 
-    } catch (error) {
-        res.status(500).send(error);
-    }
+        } catch (error) {
+            res.status(500).send(error);
+        }
+    });
+};
+
+
+exports.uploadImage = async(req, res) => {
+    singleUpload(req, res, (err) => {
+        if (err) {
+            return res.status(422).send({ error: { title: 'File Upload Error', detail: err.message } });
+        }
+        return res.status(200).json({ 'imageUrl': req.file.location });
+    });
 };
 
 exports.updatePet = async(req, res) => {
