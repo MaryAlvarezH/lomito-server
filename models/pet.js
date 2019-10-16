@@ -25,7 +25,8 @@ const petSchema = new Schema({
     status: {
         type: String,
         default: 'active'
-    }
+    },
+    imageURL: String,
 }, { timestamps: true });
 
 const Pet = mongoose.model('Pet', petSchema);
