@@ -15,6 +15,7 @@ const petSchema = new Schema({
             timePeriod: String,
         }
     },
+    hometown: String,
     skills: [],
     observations: [],
     ownerId: {
