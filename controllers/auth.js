@@ -3,7 +3,7 @@ const mongoose = require('../config/connection');
 const config = require('../config/JWTSecret')
 const UserModel = require('../models/user');
 
-exports.signUp = async(req, res, next) => {
+exports.signUp = async(req, res) => {
 
     const userRegister = await UserModel.findOne({username: req.body.username});
     
@@ -14,9 +14,20 @@ exports.signUp = async(req, res, next) => {
         user.lastName = req.body.lastName;
         user.email = req.body.email;
         user.password = await user.encryptPassword(req.body.password);
-        if (req.body.address) {
-            user.address = req.body.address;
+        user.address = {};
+        if (req.body.street) {
+            user.address.street = req.body.street;
         }
+        if (req.body.state) {
+            user.address.state = req.body.state;
+        }
+        if (req.body.city) {
+            user.address.city = req.body.city;
+        }
+        if (req.body.zip) {
+            user.address.zip = req.body.zip;
+        }
+       
         try {
             data = await user.save();
             res.status(201).json(data);
@@ -29,7 +40,7 @@ exports.signUp = async(req, res, next) => {
     }
 };
 
-exports.login = async(req, res, next) => {
+exports.login = async(req, res) => {
     try {
         const username = req.body.username;
         const password = req.body.password;
@@ -49,7 +60,6 @@ exports.login = async(req, res, next) => {
 
     } catch (error) {
         return res.status(500).send(error);
-        
+
     }
-    
 };

@@ -12,11 +12,8 @@ const params = {
 }
 
 module.exports = () => {
-    console.log('params',params)
     const strategy = new Strategy(params, async(payload, done) => {
-        console.log('payload', payload)
         const user = await UserModel.findById(payload.id);
-        console.log('user', user)
         if(!user) return done(new Error('user not found.'), null);
         return done(null, user);
     });

@@ -23,8 +23,8 @@ const userSchema = new Schema({
     address: {
         type: {
             street: String,
-            city: String,
             state: String,
+            city: String,
             zip: String
         },
         required: false
@@ -51,7 +51,6 @@ userSchema.methods.checkPassword = async function(password) {
     console.log('this.password',this.password )
     try {
         const result = await bcrypt.compare(password, this.password);
-        console.log('password result', result)
         return result;
         
     } catch (error) {
