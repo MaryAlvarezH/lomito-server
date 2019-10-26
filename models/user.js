@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -33,6 +34,31 @@ const userSchema = new Schema({
         default: 'active'
     }
 }, { timestamps: true });
+
+userSchema.methods.encryptPassword = async password => {
+    try{
+        const salt = await bcrypt.genSaltSync(5);
+        const hash = await bcrypt.hash(password, salt);
+        return hash;
+    } catch(err) {
+        console.log(err);
+    }
+}
+
+userSchema.methods.checkPassword = async function(password) {
+
+    console.log('password',password )
+    console.log('this.password',this.password )
+    try {
+        const result = await bcrypt.compare(password, this.password);
+        console.log('password result', result)
+        return result;
+        
+    } catch (error) {
+        console.log(error);
+    }
+   
+}
 
 const User = mongoose.model('User', userSchema);
 
