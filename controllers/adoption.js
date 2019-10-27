@@ -1,6 +1,7 @@
-const mongoose = require('../config/connection');
 const AdoptionModel = require('../models/adoption');
 const moment = require('moment');
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 
 exports.getAllAdoptions = async(req, res) => {
     try {
@@ -13,16 +14,36 @@ exports.getAllAdoptions = async(req, res) => {
 };
 
 exports.getAddoptionByPetId = async(req, res) => {
-    try {
-        const petId = req.params.id;
-        const adoption = await AdoptionModel.find({ petId });
-        console.log('info', adoption);
-        res.status(200).send(adoption);
-
-    } catch (error) {
-        res.status(500).send(error);
-
-    }
+    const petId = req.params.id;
+    const adoption = await AdoptionModel.aggregate([
+        { $match: 
+            { "petId" : ObjectId(petId)} 
+        },
+        { $lookup: 
+            {
+                from: "pets",
+                localField:"petId",
+                foreignField: "_id",
+                as: "pet_details"
+            }
+        },
+        {
+            $lookup:  
+                {
+                    from: "users",
+                    localField:"applicants.userId",
+                    foreignField: "_id",
+                    as: "applicants_details"
+                }
+        },
+        { $project: {
+            petId: "$petId",
+            pet_details: "$pet_details",
+            applicants_details: "$applicants_details",
+            
+        }}
+    ]).exec();
+    res.send(adoption);
 };
 
 exports.create = async(req, res) => {
