@@ -46,7 +46,6 @@ exports.addPet = async(req, res) => {
         ownerId: req.body.ownerId
     });
 
-    res.send(pet);
     try {
         const petSaved = await pet.save();
         res.status(201).send(petSaved);
