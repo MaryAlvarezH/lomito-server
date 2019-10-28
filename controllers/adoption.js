@@ -1,4 +1,5 @@
 const AdoptionModel = require('../models/adoption');
+const PetModel = require('../models/pet');
 const moment = require('moment');
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
@@ -13,35 +14,42 @@ exports.getAllAdoptions = async(req, res) => {
     }
 };
 
-exports.getAddoptionByPetId = async(req, res) => {
-    const petId = req.params.id;
-    const adoption = await AdoptionModel.aggregate([
-        { $match: 
-            { "petId" : ObjectId(petId)} 
+exports.getAddoptionByUserId = async(req, res) => {
+    const ownerId = req.params.id;
+    const adoption = await PetModel.aggregate([
+        { $lookup: 
+            {
+                from: "adoptions",
+                localField:"_id",
+                foreignField: "petId",
+                as: "adoption"
+            }
         },
         { $lookup: 
             {
-                from: "pets",
-                localField:"petId",
+                from: "users",
+                localField:"adoption.applicants.userId",
                 foreignField: "_id",
-                as: "pet_details"
+                as: "applicants_details"
             }
         },
-        {
-            $lookup:  
-                {
-                    from: "users",
-                    localField:"applicants.userId",
-                    foreignField: "_id",
-                    as: "applicants_details"
-                }
+        { $match: 
+            { 
+                "ownerId" : ObjectId(ownerId),
+                "status": "active"
+            } 
         },
-        { $project: {
-            petId: "$petId",
-            pet_details: "$pet_details",
-            applicants_details: "$applicants_details",
-            
-        }}
+        { $project: 
+            { 
+                "petId": "$petId",
+                "name": "$name",
+                "status": "$status",
+                "createdAt": "$createdAt",
+                "imageURL": "$imageURL",
+                "adoption": "$adoption.applicants",
+                "applicants_details": "$applicants_details"
+            }
+        }
     ]).exec();
     res.send(adoption);
 };
@@ -72,6 +80,7 @@ exports.create = async(req, res) => {
 exports.addApplicant = async(req, res) => {
     const petId = req.body.petId;
     const newApplicant = req.body.applicants;
+
     const newApplicantData = newApplicant.map(application => {
         currentDate = Date(moment());
         application.createdAt = currentDate;
@@ -81,16 +90,27 @@ exports.addApplicant = async(req, res) => {
 
     try {
         const [adoption] = await AdoptionModel.find({ petId });
-        const applicantsData = adoption.applicants;
+        const [applicantExist] = await AdoptionModel.find({'applicants.userId': ObjectId(newApplicant[0].userId), petId: ObjectId(petId)});
 
-        const updatedApplicantList = [...applicantsData, ...newApplicantData];
-        const adoptionModified = await AdoptionModel.findOneAndUpdate({ petId }, { applicants: updatedApplicantList }, { new: true }).exec();
-
-        res.status(200).send(adoptionModified);
-
+        if (adoption) {
+            if (applicantExist) {
+                return res.status(200).json({status:'error', message: 'applicant already exist'})
+            } else {
+                const applicantsData = adoption.applicants;
+                const updatedApplicantList = [...applicantsData, ...newApplicantData];
+                const adoptionModified = await AdoptionModel.findOneAndUpdate({ petId }, { applicants: updatedApplicantList }, { new: true }).exec();
+                res.status(201).send(adoptionModified);
+            }
+        } else {
+            const newAdoption = new AdoptionModel({
+                petId: req.body.petId,
+                applicants: newApplicantData
+            });
+            const adoptionSaved = await newAdoption.save();
+            res.status(201).send(adoptionSaved);
+        }
     } catch (error) {
         res.status(500).send(error);
-
     }
 };
 
