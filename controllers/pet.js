@@ -27,6 +27,11 @@ exports.petDetails = async(req, res) => {
 };
 
 exports.addPet = async(req, res) => {
+    const age = {
+        number: req.body.age_number,
+        timePeriod: req.body.age_timePeriod
+    }
+
     const pet = new PetModel({
         name: req.body.name,
         sort: req.body.sort,
@@ -34,13 +39,14 @@ exports.addPet = async(req, res) => {
         breed: req.body.breed,
         size: req.body.size,
         temperament: req.body.temperament,
-        age: req.body.age,
+        age,
         hometown: req.body.hometown,
         skills: req.body.skills,
         observations: req.body.observations,
         ownerId: req.body.ownerId
     });
 
+    res.send(pet);
     try {
         const petSaved = await pet.save();
         res.status(201).send(petSaved);
