@@ -7,7 +7,7 @@ class AdoptionRoutes {
     get routes() {
         router.get('/all', adoptionController.getAllAdoptions);
         router.post('/create', adoptionController.create);
-        router.get('/info/:id', adoptionController.getAddoptionByPetId);
+        router.get('/info/:id', adoptionController.getAddoptionByUserId);
         router.post('/add-applicant', adoptionController.addApplicant);
         router.post('/remove-applicant', adoptionController.removeApplication);
         return router;
