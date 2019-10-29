@@ -15,6 +15,7 @@ const petSchema = new Schema({
             timePeriod: String,
         }
     },
+    hometown: String,
     skills: [],
     observations: [],
     ownerId: {
@@ -24,7 +25,8 @@ const petSchema = new Schema({
     status: {
         type: String,
         default: 'active'
-    }
+    },
+    imageURL: String,
 }, { timestamps: true });
 
 const Pet = mongoose.model('Pet', petSchema);
